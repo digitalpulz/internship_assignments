@@ -28,7 +28,7 @@
     </tr>
     </thead>
     <tbody id="productTableBody">
-        <!-- Product rows will be dynamically added here -->
+        <!-- Product rows here -->
     </tbody>
 </table>
 
@@ -69,7 +69,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
-    var selectedProductId; // Store the ID of the selected product for update
+    var selectedProductId; // to store the ID of the selected product for update ====
 
     // Function to get the product list ========================================================== (GET)
     function getProductList() {
