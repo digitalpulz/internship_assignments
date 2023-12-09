@@ -73,7 +73,7 @@
     <div class="container">
         <h1>Add Product</h1>
 
-        <form id="addProductForm">
+        <form id="addProduct">
             <div class="form-group">
                 <label for="productCode">Product Code:</label>
                 <input type="text" id="productCode" name="productCode" required>
@@ -109,8 +109,8 @@
     </div>
 <script> 
 function addProduct() {
-        if (document.getElementById("addProductForm").checkValidity()) {
-        // Get form data
+        if (document.getElementById("addProduct").checkValidity()) {
+
         var productData = {
             product: {
                 productCode: document.getElementById("productCode").value,
@@ -122,7 +122,7 @@ function addProduct() {
             }
         };
 
-        // Make AJAX request to Spring Boot backend
+
         fetch('http://localhost:8092/BASE_API/rest/Product', {
             method: 'POST',
             headers: {
@@ -134,17 +134,18 @@ function addProduct() {
         })
         .then(response => response.json())
         .then(data => {
-            // After successful addition, refresh the product list
+
             if (data) {
-                alert('Product added successfully!');
+                alert('Product added.........');
+                window.location.href = `products.php`;
                 getProductList();
             } else {
-                alert('Failed to add product. Please check the inputs.');
+                alert('Failed to add...........');
             }
         })
         .catch(error => console.error('Error:', error));
     } else {
-        alert('Please fill all the details correctly.');
+        alert('Fields cannot be empty.......');
     }
 }
 
