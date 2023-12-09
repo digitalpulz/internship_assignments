@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Product Management</title>
     <style>
@@ -9,7 +10,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -45,17 +46,19 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="section">
             <div>
                 <div class="section">
                     <p>You can manage products by Adding, Updating, Deleting products.</p>
-                    <a href="addProduct.php" >View All Current Products</a>
+                    <a href="products.php">View All Current Products</a>
                 </div>
             </div>
         </div>
     </div>
 
 </body>
+
 </html>

@@ -60,12 +60,11 @@
             background-color: #e74c3c;
             color: #fff;
         }
-        
     </style>
 </head>
 
 <body>
-<button class="btn" onclick="navigateToAddProduct()"  text-align="right">Add Product</button>
+    <button class="btn" onclick="navigateToAddProduct()" text-align="right">Add Product</button>
     <div class="container">
         <h1>Product List</h1>
 
@@ -90,7 +89,7 @@
     <script>
         var selectedProductId;
 
-        function getProductList() {
+        function getProducts() {
             fetch('http://localhost:8092/BASE_API/rest/Product', {
                     headers: {
                         'Authorization': 'Basic aGlzOmhpczEyMzQ1',
@@ -99,44 +98,48 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // Update the product table with the latest data
+
                     var productTableBody = document.getElementById('productTableBody');
                     productTableBody.innerHTML = '';
 
                     data.forEach(product => {
                         var row = productTableBody.insertRow();
-                        row.insertCell(0).innerText = product.productCode;
-                        row.insertCell(1).innerText = product.productName;
-                        row.insertCell(2).innerText = product.dangerLevel;
-                        row.insertCell(3).innerText = product.reorderLevel;
-                        row.insertCell(4).innerText = product.active ? 'Yes' : 'No';
-                        row.insertCell(5).innerText = product.createdBy;
+                        ['productCode', 'productName', 'dangerLevel', 'reorderLevel', 'active', 'createdBy'].forEach((field, index) => {
+                            var cell = row.insertCell(index);
+                            if (field === 'active') {
+                                cell.innerText = product[field] ? 'Yes' : 'No';
+                            } else {
+                                cell.innerText = product[field];
+                            }
+                        });
 
-                        
                         var actionsCell = row.insertCell(6);
-                        var updateButton = document.createElement('button');
-                        updateButton.innerText = 'Update';
-                        updateButton.className = 'btn ';
-                        updateButton.onclick = function() {
-                           
+                        var updateButton = createButton('Update', function() {
                             selectedProductId = product.id;
-                            showUpdateForm(product);
-                        };
+                            UpdateForm(product);
+                        });
                         actionsCell.appendChild(updateButton);
 
-                        var deleteButton = document.createElement('button');
-                        deleteButton.innerText = 'Delete';
-                        deleteButton.className = 'btn btn-danger btn-sm';
-                        deleteButton.onclick = function() {
+                        var deleteButton = createButton('Delete', function() {
                             deleteProduct(product.id);
-                        };
+                        }, );
                         actionsCell.appendChild(deleteButton);
                     });
                 })
                 .catch(error => console.error('Error:', error));
         }
 
-        function showUpdateForm(product) {
+        // Helper function to create a button with specified text, click handler, and classes
+        function createButton(text, clickHandler, ...classes) {
+            var button = document.createElement('button');
+            button.innerText = text;
+            button.className = 'btn ' + classes.join(' ');
+            button.onclick = clickHandler;
+            return button;
+        }
+
+
+        function UpdateForm(product) {
 
             window.location.href = `updateProduct.php?id=${product.id}`;
         }
@@ -164,7 +167,9 @@
                     })
                     .then(response => {
                         if (response.ok) {
-                            getProductList();
+                            alert('Product Deleted...');
+
+                            getProducts();
                         } else {
                             alert('Failed');
                         }
@@ -174,7 +179,7 @@
         }
 
 
-        getProductList();
+        getProducts();
 
         function navigateToAddProduct() {
             window.location.href = 'addProduct.php';

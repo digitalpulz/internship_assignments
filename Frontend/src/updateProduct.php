@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
 
 <head>
 
@@ -70,33 +69,33 @@
         <form id="updateForm">
             <h2>Update Product</h2>
             <div class="form-group">
-                <label >Product Code:</label>
+                <label for="productCode">Product Code:</label>
                 <input type="text" id="productCode" name="productCode" required>
             </div>
             <div class="form-group">
-                <label >Product Name:</label>
+                <label for="productName">Product Name:</label>
                 <input type="text" id="productName" name="productName" required>
             </div>
             <div class="form-group">
-                <label >Danger Level:</label>
+                <label for="dangerLevel">Danger Level:</label>
                 <input type="number" id="dangerLevel" name="dangerLevel" required>
             </div>
             <div class="form-group">
-                <label >Reorder Level:</label>
+                <label for="reorderLevel">Reorder Level:</label>
                 <input type="number" id="reorderLevel" name="reorderLevel" required>
             </div>
             <div class="form-group">
-                <label>Active:</label>
+                <label for="active">Active:</label>
                 <select id="active" name="active" required>
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </select>
             </div>
             <div class="form-group">
-                <label >User:</label>
+                <label for="user">User:</label>
                 <input type="number" id="user" name="user" required>
             </div>
-            <button type="button" onclick="submitUpdate()">Update</button>
+            <button type="button" onclick="submitForm()">Update</button>
         </form>
     </div>
 
@@ -104,82 +103,90 @@
     <script>
         var selectedProductId;
 
-        function submitUpdate() {
+        function submitForm() {
+            const isConfirmed = confirm('Are you sure you want to update this product?');
 
-            var updatedCode = document.getElementById('productCode').value;
-            var updatedName = document.getElementById('productName').value;
-            var updatedDangerLevel = document.getElementById('dangerLevel').value;
-            var updatedReorderLevel = document.getElementById('reorderLevel').value;
-            var updatedActive = document.getElementById('active').value === 'true';
-            var updatedUser = document.getElementById('user').value;
+            if (isConfirmed) {
+
+                const updatedCode = document.getElementById('productCode').value;
+                const updatedName = document.getElementById('productName').value;
+                const updatedDangerLevel = document.getElementById('dangerLevel').value;
+                const updatedReorderLevel = document.getElementById('reorderLevel').value;
+                const updatedActive = document.getElementById('active').value === 'true';
+                const updatedUser = document.getElementById('user').value;
 
 
-            var updateData = {
-                "product": {
-                    "productCode": updatedCode,
-                    "productName": updatedName,
-                    "dangerLevel": updatedDangerLevel,
-                    "reorderLevel": updatedReorderLevel,
-                    "active": updatedActive,
-                    "user": updatedUser
-                }
-            };
-
-            fetch(`http://localhost:8092/BASE_API/rest/Product/${selectedProductId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Basic aGlzOmhpczEyMzQ1',
-                        'X-tenantID': 'D0001'
-                    },
-                    body: JSON.stringify(updateData)
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Product updated successfully!');
- 
-                        window.location.href = 'products.php';
-                    } else {
-                        alert('Failed to update product. Please try again.');
+                const updateData = {
+                    "product": {
+                        "productCode": updatedCode,
+                        "productName": updatedName,
+                        "dangerLevel": updatedDangerLevel,
+                        "reorderLevel": updatedReorderLevel,
+                        "active": updatedActive,
+                        "user": updatedUser
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                };
+
+                fetch(`http://localhost:8092/BASE_API/rest/Product/${selectedProductId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Basic aGlzOmhpczEyMzQ1',
+                            'X-tenantID': 'D0001'
+                        },
+                        body: JSON.stringify(updateData)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = 'products.php';
+                        } else {
+                            alert('Failed to update product. Please try again.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
         }
 
 
-        function getProductForUpdate() {
-            
+
+        function getProduct() {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
 
             if (productId) {
-
-                fetch(`http://localhost:8092/BASE_API/rest/Product/${productId}`, {
-                        headers: {
-                            'Authorization': 'Basic aGlzOmhpczEyMzQ1',
-                            'X-tenantID': 'D0001'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(product => {
- 
-                        document.getElementById('productCode').value = product.productCode;
-                        document.getElementById('productName').value = product.productName;
-                        document.getElementById('dangerLevel').value = product.dangerLevel;
-                        document.getElementById('reorderLevel').value = product.reorderLevel;
-                        document.getElementById('active').value = product.active.toString();
-                        document.getElementById('user').value = product.user;
-
-  
-                        selectedProductId = product.id;
-                    })
-                    .catch(error => console.error('Error:', error));
+                fetchProduct(productId);
             } else {
                 console.error('Product ID not found');
             }
         }
 
-        getProductForUpdate();
+        function fetchProduct(productId) {
+            fetch(`http://localhost:8092/BASE_API/rest/Product/${productId}`, {
+                    headers: {
+                        'Authorization': 'Basic aGlzOmhpczEyMzQ1',
+                        'X-tenantID': 'D0001'
+                    }
+                })
+                .then(response => response.json())
+                .then(product => {
+                    updateFormFields(product);
+                    selectedProductId = product.id;
+                })
+                .catch(error => console.error('Error fetching product:', error));
+        }
+
+        function updateFormFields(product) {
+            document.getElementById('productCode').value = product.productCode;
+            document.getElementById('productName').value = product.productName;
+            document.getElementById('dangerLevel').value = product.dangerLevel;
+            document.getElementById('reorderLevel').value = product.reorderLevel;
+            document.getElementById('active').value = product.active.toString();
+            document.getElementById('user').value = product.user;
+        }
+
+
+        getProduct();
+
     </script>
 </body>
 

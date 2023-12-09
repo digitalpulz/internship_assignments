@@ -75,32 +75,32 @@
 
         <form id="addProduct">
             <div class="form-group">
-                <label for="productCode">Product Code:</label>
+                <label >Product Code:</label>
                 <input type="text" id="productCode" name="productCode" required>
             </div>
 
             <div class="form-group">
-                <label for="productName">Product Name:</label>
+                <label >Product Name:</label>
                 <input type="text" id="productName" name="productName" required>
             </div>
 
             <div class="form-group">
-                <label for="dangerLevel">Danger Level:</label>
+                <label >Danger Level:</label>
                 <input type="number" id="dangerLevel" name="dangerLevel" required>
             </div>
 
             <div class="form-group">
-                <label for="reorderLevel">Reorder Level:</label>
+                <label >Reorder Level:</label>
                 <input type="number" id="reorderLevel" name="reorderLevel" required>
             </div>
 
             <div class="form-group">
-                <label for="active">Active:</label>
+                <label >Active:</label>
                 <input type="checkbox" id="active" name="active">
             </div>
 
             <div class="form-group">
-                <label for="user">User:</label>
+                <label >User:</label>
                 <input type="number" id="user" name="user" required>
             </div>
 
@@ -138,7 +138,7 @@ function addProduct() {
             if (data) {
                 alert('Product added.........');
                 window.location.href = `products.php`;
-                getProductList();
+                getProducts();
             } else {
                 alert('Failed to add...........');
             }
