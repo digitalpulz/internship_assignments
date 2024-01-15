@@ -32,7 +32,7 @@
                             <td>' . htmlspecialchars($product['reorderLevel']) . '</td>
                             <td>' . ($product['active'] ? 'Yes' : 'No') . '</td>
                             <td>
-                                <form action="view_product.php" method="post">
+//                                <form action="delete_product.php" method="post">
                                     <input type="hidden" name="productId" value="' . $product['id'] . '">
                                     <button 
                                     style="

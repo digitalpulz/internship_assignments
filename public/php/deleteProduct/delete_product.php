@@ -22,9 +22,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['productId'])) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $requestData);
 
     $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        echo 'Curl error: ' . curl_error($ch);
+    } else {
+        $responseData = json_decode($response, true);
+        if (isset($responseData) && is_array($responseData)) {
+            echo 'Success: Product deleted successfully.';
+        } else {
+            echo 'Error.';
+        }
+    }
     curl_close($ch);
 
-    header("Location: view_products.php");
     exit;
 }
 ?>
